@@ -1,0 +1,21 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.5.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '15'
+
+repositories {
+	mavenCentral()
+	flatDir {
+		dirs project.property("opencv.jar")
+	}
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'opencv:opencv-450'
+}
