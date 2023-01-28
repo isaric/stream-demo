@@ -1,4 +1,4 @@
-##stream-demo
+## stream-demo
 
 In order to setup the project you will need to edit application.properties and put in the url of
 your camera. You will also need to add the path to the opencv jar directory as a gradle property
