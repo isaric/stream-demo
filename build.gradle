@@ -10,9 +10,12 @@ sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
+	flatDir {
+		dirs project.property("opencv.jar")
+	}
 }
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.openpnp:opencv:4.5.1-1'
+	implementation 'opencv:opencv-450'
 }

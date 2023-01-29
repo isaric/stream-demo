@@ -6,11 +6,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
 @Controller
 @RequestMapping("/video")
@@ -18,15 +20,17 @@ public class StreamController {
 
     private static final Logger logger = LoggerFactory.getLogger(StreamController.class);
 
-    private final ThreadingVideoCaptureGenerator generator;
+    private final List<ThreadingVideoCaptureGenerator> captures;
 
     @Autowired
-    public StreamController(ThreadingVideoCaptureGenerator generator) {
-        this.generator = generator;
+    public StreamController(List<ThreadingVideoCaptureGenerator> captures) {
+        this.captures = captures;
     }
 
-    @GetMapping("/stream")
-    public void getStream2(HttpServletResponse response) throws IOException {
+
+    @GetMapping("/stream/{index}")
+    public void getStreamForIndex(@PathVariable int index, HttpServletResponse response) throws IOException {
+        var generator = captures.get(index);
         OutputStream stream = response.getOutputStream();
         response.setContentType("multipart/x-mixed-replace; boundary=image");
         response.setHeader("Pragma", "no-cache");
@@ -42,7 +46,6 @@ public class StreamController {
                         "\r\n").getBytes());
                 stream.write(imageBytes);
                 stream.write(("\r\n--image\r\n").getBytes());
-
             }
         } catch (Exception ex) {
             logger.info("Client closed connection or link to camera broke", ex);
